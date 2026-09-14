@@ -10,9 +10,9 @@ import subprocess
 import tempfile
 
 REPO = Path(__file__).resolve().parent.parent
-ROOT = REPO / "plugins/minim"
+ROOT = REPO / "dist/codex/minim"
 subprocess.run(['python3', str(REPO / 'scripts/generate.py'), '--check'], check=True)
-source = json.loads((ROOT / 'plugin.json').read_text())
+source = json.loads((REPO / 'plugin.json').read_text())
 assert source['$schema'] == 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json'
 assert set(source) <= {'$schema', 'name', 'version', 'description', 'author', 'homepage', 'repository', 'license', 'keywords', 'extensions'}
 cursor = REPO / 'dist/cursor/minim'
@@ -25,7 +25,8 @@ assert not (cursor / 'plugin.json').exists()
 rule = (cursor / 'rules/minim.mdc').read_text()
 frontmatter, body = rule.removeprefix('---\n').split('\n---\n\n', 1)
 assert 'alwaysApply: true' in frontmatter.splitlines()
-assert body == (ROOT / 'minim.md').read_text()
+assert body == (REPO / 'minim.md').read_text()
+assert (ROOT / 'minim.md').read_bytes() == (REPO / 'minim.md').read_bytes()
 marketplace = json.loads((REPO / ".agents/plugins/marketplace.json").read_text())
 assert marketplace["name"] == "minim"
 assert len(marketplace["plugins"]) == 1

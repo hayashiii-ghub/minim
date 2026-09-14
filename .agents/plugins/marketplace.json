@@ -8,7 +8,7 @@
       "name": "minim",
       "source": {
         "source": "local",
-        "path": "./plugins/minim"
+        "path": "./dist/codex/minim"
       },
       "policy": {
         "installation": "AVAILABLE",

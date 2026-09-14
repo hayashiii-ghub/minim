@@ -2,7 +2,7 @@
 
 AIとのやりとりを、少ない入力と読みやすい返答で進めるための小さなプラグインです。
 
-本体は[minim.md](plugins/minim/minim.md)の6つの約束です。
+本体は[minim.md](minim.md)の6つの約束です。
 
 - 依頼の目的から作業が逸れていないか確かめる
 - 既存の実装や仕組みを確認し、使えるものは使う
@@ -77,15 +77,27 @@ ln -s "$PWD/dist/cursor/minim" ~/.cursor/plugins/local/minim
 
 CodexではSessionStartフックが`minim.md`の本文を直接渡します。開始・再開・クリア・圧縮の各イベントに登録します。追加のスキルやMCPサーバーはありません。
 
-Cursorでは`alwaysApply: true`のルールに同じ本文を生成します。共通形式とCursor形式の判定、およびフックの自動検出が混ざらないよう、Cursor用は`dist/cursor/minim/`へ分けます。
+Cursorでは`alwaysApply: true`のルールに同じ本文を生成します。共通形式とCursor形式の判定、およびフックの自動検出が混ざらないよう、配布物は`dist/codex/minim/`と`dist/cursor/minim/`へ分けます。
 
 会話の振る舞いは、利用するモデルや他の指示にも左右されます。macOSのCodexで確認しており、他の環境での動作は未確認です。
 
+## 構成
+
+```text
+minim.md                 約束の正本
+plugin.json              配布情報の正本
+adapters/codex/hooks/     Codexへの接続
+scripts/                 生成・検査
+dist/codex/minim/        Codex用の生成物
+dist/cursor/minim/       Cursor用の生成物
+.agents/plugins/         Codex配布一覧の生成物
+```
+
 ## 開発
 
-本文の正本は`plugins/minim/minim.md`、配布情報の正本は[Agent Plugins形式](https://agent-plugins.org/specification)の`plugins/minim/plugin.json`です。名前・バージョンなどはここで一度だけ編集します。
+本文の正本は`minim.md`、配布情報の正本は[Agent Plugins形式](https://agent-plugins.org/specification)の`plugin.json`です。名前・バージョンなどはここで一度だけ編集します。
 
-`python3 scripts/generate.py`がCodexのマニフェストと、Cursorのマニフェスト・常時適用ルール・ライセンスを生成します。生成物は直接編集しません。Codexのフックは`plugins/minim/hooks/`、配布一覧は`.agents/plugins/marketplace.json`です。
+`python3 scripts/generate.py`がCodex・Cursorそれぞれの配布物を`dist/`へ生成します。配布一覧の`.agents/plugins/marketplace.json`も生成します。生成物は直接編集しません。Codexのフックは`adapters/codex/hooks/`で編集します。
 
 ```bash
 python3 scripts/generate.py

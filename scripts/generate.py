@@ -6,20 +6,34 @@ import json
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
-ROOT = REPO / 'plugins/minim'
+CODEX = REPO / 'dist/codex/minim'
 
 
 def outputs():
-    source = json.loads((ROOT / 'plugin.json').read_text())
+    source = json.loads((REPO / 'plugin.json').read_text())
     common = {key: value for key, value in source.items()
               if key not in ('$schema', 'extensions')}
     codex = {**common, **source.get('extensions', {}).get('com.openai.codex', {})}
     cursor = {**common, 'rules': './rules/'}
-    body = (ROOT / 'minim.md').read_text()
+    body = (REPO / 'minim.md').read_text()
     assert body.strip(), 'minim.mdが空です'
     encode = lambda data: json.dumps(data, ensure_ascii=False, indent=2) + '\n'
     return {
-        ROOT / '.codex-plugin/plugin.json': encode(codex),
+        CODEX / '.codex-plugin/plugin.json': encode(codex),
+        CODEX / 'minim.md': body,
+        CODEX / 'LICENSE': (REPO / 'LICENSE').read_text(),
+        **{CODEX / 'hooks' / path.name: path.read_text()
+           for path in sorted((REPO / 'adapters/codex/hooks').iterdir()) if path.is_file()},
+        REPO / '.agents/plugins/marketplace.json': encode({
+            'name': source['name'],
+            'interface': {'displayName': 'Minim'},
+            'plugins': [{
+                'name': source['name'],
+                'source': {'source': 'local', 'path': './dist/codex/minim'},
+                'policy': {'installation': 'AVAILABLE', 'authentication': 'ON_INSTALL'},
+                'category': 'Productivity',
+            }],
+        }),
         REPO / 'dist/cursor/minim/.cursor-plugin/plugin.json': encode(cursor),
         REPO / 'dist/cursor/minim/rules/minim.mdc': (
             '---\ndescription: ' + json.dumps(source['description'], ensure_ascii=False)
