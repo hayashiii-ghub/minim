@@ -11,6 +11,14 @@ Codexとのやりとりを、少ない入力と読みやすい返答で進める
 - 絵文字を添えたひと言を、本文から分けて冒頭に置く
 - 選択肢は必要な数だけ最大5つ。専用UIを優先し、テキストでは「あいうえお」で選べるようにする
 
+## 返答例
+
+```text
+🔍 使い方を確認しました
+
+入力ファイルの形式が書かれていません。CSVの例を1つ載せると、使い始めやすくなります。
+```
+
 ## 導入
 
 プラグインとSessionStartフックに対応するCodex、およびbashが必要です。
@@ -21,6 +29,33 @@ codex plugin add minim@minim
 ```
 
 Codexでminimとそのフックを有効にし、新しいタスクを開いてください。スキルを指定する必要はありません。
+
+## 更新
+
+配布一覧を更新してから、minimを再導入します。
+
+```bash
+codex plugin marketplace upgrade minim
+codex plugin add minim@minim
+```
+
+更新後はフックの有効状態を確認し、新しいタスクを開いてください。
+
+## 解除
+
+minimをアンインストールします。
+
+```bash
+codex plugin remove minim@minim
+```
+
+配布一覧の登録も外す場合は、続けて実行します。
+
+```bash
+codex plugin marketplace remove minim
+```
+
+解除後も、新しいタスクを開いてください。既存のタスクには、読み込まれた約束が残ることがあります。
 
 ## 仕組み
 

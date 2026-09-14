@@ -1,6 +1,6 @@
 {
   "name": "minim",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "少ない入力と読みやすい返答で、AIとの会話を進める対話UI。",
   "author": {
     "name": "hayashiii-ghub"
