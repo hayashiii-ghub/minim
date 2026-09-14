@@ -61,30 +61,28 @@ codex plugin marketplace remove minim
 
 ## Cursorへの導入
 
-リポジトリ内で生成し、実ファイルをコピーしてCursorのローカルプラグインとして登録します。Python 3が必要です。既に同名の登録がある場合は、内容を確認してから更新してください。シンボリックリンクで登録済みの場合は、先に下の移行手順を実行します。
+このリポジトリのフォルダで、次のコマンドを実行します。Python 3.9以上が必要です。
 
 ```bash
-python3 scripts/generate.py
-test ! -L ~/.cursor/plugins/local/minim &&
-  mkdir -p ~/.cursor/plugins/local/minim &&
-  cp -R dist/cursor/minim/. ~/.cursor/plugins/local/minim/
+python3 scripts/install_cursor.py
 ```
 
-Cursorで`Developer: Reload Window`を実行し、Customize → Rulesでminimのルールと常時適用を確認して、新しい会話を開きます。ローカルプラグインの読み込みが許可されている必要があります。
+Cursorで`Developer: Reload Window`を実行して、新しい会話を開けば使えます。Customize → Rulesに`minim`が表示されます。
 
-更新時はリポジトリを更新し、上の生成・コピーを再実行してから、Cursorを再読み込みします。コピー方式なので、リポジトリの更新だけではCursor側に反映されません。解除は登録先の`~/.cursor/plugins/local/minim`フォルダを削除して、再読み込みします。
+**更新も同じコマンドです。** リポジトリを更新してから実行し、Cursorを再読み込みしてください。以前のリンク方式からの移行も自動で行います。
 
-### シンボリックリンクからの移行
+解除するときは`~/.cursor/plugins/local/minim`フォルダを削除し、Cursorを再読み込みします。
 
-macOSのCursor 3.20.17では、`~/.cursor/plugins/local`の外を指すリンクが拒否されました。以前の手順で登録したリンクだけを解除してから、上の生成・コピーを実行してください。リンク先のリポジトリは削除されません。
+<details>
+<summary>登録先・バックアップ・動作確認</summary>
 
-```bash
-if [ -L ~/.cursor/plugins/local/minim ]; then
-  unlink ~/.cursor/plugins/local/minim
-fi
-```
+[Cursorのローカル導入手順](https://cursor.com/docs/plugins#test-plugins-locally)にあるコピー方式で、`~/.cursor/plugins/local/minim`へ実ファイルを登録します。ローカルプラグインの読み込みが許可されている必要があります。
 
-[Cursorのローカル導入手順](https://cursor.com/docs/plugins#test-plugins-locally)にあるコピー方式を使っています。2026年9月14日、macOSのCursor 3.20.17のローカルIDEで、ルールの読み込みと`alwaysApply: true`を確認しました。Kimi K3 Maxとの新しい会話では、絵文字付きの見出し、返答後の標準選択UI、選択内容への応答を確認しています。クラウド環境での動作は未確認です。
+既存の登録は`~/.cursor/plugins/backups/`へ退避します。シンボリックリンクの参照先には触れません。macOSのCursor 3.20.17では登録先の外を指すリンクが拒否されたため、この方式にしています。
+
+2026年9月14日、macOSのCursor 3.20.17のローカルIDEで、ルールの読み込みと`alwaysApply: true`を確認しました。Kimi K3 Maxとの新しい会話では、絵文字付きの見出し、返答後の標準選択UI、選択内容への応答を確認しています。クラウド環境での動作は未確認です。
+
+</details>
 
 ## 仕組み
 

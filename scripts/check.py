@@ -10,6 +10,7 @@ import subprocess
 import tempfile
 
 REPO = Path(__file__).resolve().parent.parent
+subprocess.run(['python3', '-m', 'unittest', 'discover', '-s', str(REPO / 'tests')], check=True)
 ROOT = REPO / "dist/codex/minim"
 subprocess.run(['python3', str(REPO / 'scripts/generate.py'), '--check'], check=True)
 source = json.loads((REPO / 'plugin.json').read_text())
