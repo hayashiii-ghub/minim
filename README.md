@@ -1,6 +1,6 @@
 # minim
 
-Codexとのやりとりを、少ない入力と読みやすい返答で進めるための小さなプラグインです。
+AIとのやりとりを、少ない入力と読みやすい返答で進めるための小さなプラグインです。
 
 本体は[minim.md](plugins/minim/minim.md)の6つの約束です。
 
@@ -19,7 +19,7 @@ Codexとのやりとりを、少ない入力と読みやすい返答で進める
 入力ファイルの形式が書かれていません。CSVの例を1つ載せると、使い始めやすくなります。
 ```
 
-## 導入
+## Codexへの導入
 
 プラグインとSessionStartフックに対応するCodex、およびbashが必要です。
 
@@ -30,7 +30,7 @@ codex plugin add minim@minim
 
 Codexでminimとそのフックを有効にし、新しいタスクを開いてください。スキルを指定する必要はありません。
 
-## 更新
+## Codexの更新
 
 配布一覧を更新してから、minimを再導入します。
 
@@ -41,7 +41,7 @@ codex plugin add minim@minim
 
 更新後はフックの有効状態を確認し、新しいタスクを開いてください。
 
-## 解除
+## Codexの解除
 
 minimをアンインストールします。
 
@@ -57,21 +57,42 @@ codex plugin marketplace remove minim
 
 解除後も、新しいタスクを開いてください。既存のタスクには、読み込まれた約束が残ることがあります。
 
+## Cursorへの導入
+
+リポジトリ内で生成し、Cursorのローカルプラグインとして登録します。Python 3が必要です。
+
+```bash
+python3 scripts/generate.py
+mkdir -p ~/.cursor/plugins/local
+ln -s "$PWD/dist/cursor/minim" ~/.cursor/plugins/local/minim
+```
+
+既に同名の登録がある場合は、内容を確認してから更新してください。Cursorで`Developer: Reload Window`を実行し、Customize → Rulesでminimのルールと常時適用を確認して、新しい会話を開きます。ローカルプラグインの読み込みが許可されている必要があります。
+
+更新時はリポジトリを更新して再生成し、Cursorを再読み込みします。解除は上記で作成した`~/.cursor/plugins/local/minim`のリンクを削除して、再読み込みします。
+
+[Cursorのローカル導入手順](https://prod.cursor.com/docs/plugins#test-plugins-locally)に沿った構成です。Cursor本体での読み込み・会話の動作は未確認です。
+
 ## 仕組み
 
-SessionStartフックが`minim.md`の本文を直接渡します。開始・再開・クリア・圧縮の各イベントに登録します。追加のスキルやMCPサーバーはありません。
+CodexではSessionStartフックが`minim.md`の本文を直接渡します。開始・再開・クリア・圧縮の各イベントに登録します。追加のスキルやMCPサーバーはありません。
+
+Cursorでは`alwaysApply: true`のルールに同じ本文を生成します。共通形式とCursor形式の判定、およびフックの自動検出が混ざらないよう、Cursor用は`dist/cursor/minim/`へ分けます。
 
 会話の振る舞いは、利用するモデルや他の指示にも左右されます。macOSのCodexで確認しており、他の環境での動作は未確認です。
 
 ## 開発
 
-本文は`plugins/minim/minim.md`、接続は`plugins/minim/hooks/`で編集します。配布一覧は`.agents/plugins/marketplace.json`、プラグイン情報は`plugins/minim/.codex-plugin/plugin.json`です。
+本文の正本は`plugins/minim/minim.md`、配布情報の正本は[Agent Plugins形式](https://agent-plugins.org/specification)の`plugins/minim/plugin.json`です。名前・バージョンなどはここで一度だけ編集します。
+
+`python3 scripts/generate.py`がCodexのマニフェストと、Cursorのマニフェスト・常時適用ルール・ライセンスを生成します。生成物は直接編集しません。Codexのフックは`plugins/minim/hooks/`、配布一覧は`.agents/plugins/marketplace.json`です。
 
 ```bash
+python3 scripts/generate.py
 python3 scripts/check.py
 ```
 
-Python 3とbashで、配布先の参照・本文の読込・本文がない場合の診断を確認します。実際の会話での表示は別途Codexで確かめます。
+Python 3とbashで、生成物と正本の一致・配布先の参照・Cursorルールの本文と常時適用設定・Codexの本文読込と欠落時の診断を確認します。CIでも生成漏れを検出します。実際の会話での表示は別途各アプリで確かめます。
 
 ## ライセンス
 

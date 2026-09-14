@@ -1,0 +1,12 @@
+{
+  "name": "minim",
+  "version": "0.2.0",
+  "description": "少ない入力と読みやすい返答で、AIとの会話を進める対話UI。",
+  "author": {
+    "name": "hayashiii-ghub"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/hayashiii-ghub/minim",
+  "repository": "https://github.com/hayashiii-ghub/minim",
+  "rules": "./rules/"
+}

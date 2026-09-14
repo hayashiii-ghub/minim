@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""本文の受け渡しと、Codexの接続設定を確認する。"""
+"""正本と生成物の一致、各環境への本文の受け渡しを確認する。"""
 
 import json
 import os
@@ -11,6 +11,21 @@ import tempfile
 
 REPO = Path(__file__).resolve().parent.parent
 ROOT = REPO / "plugins/minim"
+subprocess.run(['python3', str(REPO / 'scripts/generate.py'), '--check'], check=True)
+source = json.loads((ROOT / 'plugin.json').read_text())
+assert source['$schema'] == 'https://agent-plugins.org/schemas/1.0.0/plugin.schema.json'
+assert set(source) <= {'$schema', 'name', 'version', 'description', 'author', 'homepage', 'repository', 'license', 'keywords', 'extensions'}
+cursor = REPO / 'dist/cursor/minim'
+cursor_manifest = json.loads((cursor / '.cursor-plugin/plugin.json').read_text())
+for key in ('name', 'version', 'description', 'author', 'homepage', 'repository', 'license'):
+    assert cursor_manifest[key] == source[key]
+assert cursor_manifest['rules'] == './rules/'
+assert not (cursor / 'hooks').exists()
+assert not (cursor / 'plugin.json').exists()
+rule = (cursor / 'rules/minim.mdc').read_text()
+frontmatter, body = rule.removeprefix('---\n').split('\n---\n\n', 1)
+assert 'alwaysApply: true' in frontmatter.splitlines()
+assert body == (ROOT / 'minim.md').read_text()
 marketplace = json.loads((REPO / ".agents/plugins/marketplace.json").read_text())
 assert marketplace["name"] == "minim"
 assert len(marketplace["plugins"]) == 1
@@ -58,4 +73,4 @@ with tempfile.TemporaryDirectory() as temporary:
         assert result.stdout == ""
         assert "本文を読めません" in result.stderr
 
-print("✔ minim: 接続設定・本文読込・欠落時の診断を確認しました")
+print("✔ minim: 生成物の一致・Cursor常時適用ルール・Codex本文読込・欠落時の診断を確認しました")
