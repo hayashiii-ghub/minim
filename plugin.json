@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "minim",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "少ない入力と読みやすい返答で、AIとの会話を進める対話UI。",
   "author": {
     "name": "hayashiii-ghub"
