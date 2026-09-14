@@ -1,5 +1,7 @@
 # minim
 
+[minim — UI with agents.](https://minim.haygsiiii.chatgpt.site/)
+
 AIとのやりとりを、少ない入力と読みやすい返答で進めるための小さなプラグインです。
 
 本体は[minim.md](minim.md)の6つの約束です。
@@ -94,6 +96,8 @@ dist/cursor/minim/       Cursor用の生成物
 ```
 
 ## 開発
+
+サイトのコードは`site/`で管理し、ChatGPT Sitesで公開しています。[サイトの更新手順](site/README.md)を参照してください。
 
 本文の正本は`minim.md`、配布情報の正本は[Agent Plugins形式](https://agent-plugins.org/specification)の`plugin.json`です。名前・バージョンなどはここで一度だけ編集します。
 

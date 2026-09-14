@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>minim</title>
+  <meta name="description" content="AIとのやりとりのための、6つの短い約束。">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2210%22 fill=%22%23111%22/%3E%3Ctext x=%2211%22 y=%2247%22 font-family=%22monospace%22 font-size=%2250%22 fill=%22%23eee%22%3Em%3C/text%3E%3C/svg%3E">
+  <style>
+    :root { color-scheme: dark; background: #111; color: #eee; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Hiragino Kaku Gothic ProN", "Noto Sans JP", monospace; font-size: 16px; font-weight: 400; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    main { max-width: 608px; margin: 80px auto; padding: 0 24px; }
+    h1 { margin: 0; font-size: 16px; line-height: 1.8; font-weight: 600; }
+    .tagline { margin: 4px 0 44px; color: #9b9b9b; font-size: 14px; line-height: 1.8; }
+    ul { list-style: none; padding: 0; margin: 0; }
+    li { position: relative; padding-left: 1.1em; margin: 0 0 24px; line-height: 1.9; overflow-wrap: anywhere; }
+    li::before { content: "-"; position: absolute; left: 0; }
+    footer { margin-top: 48px; display: flex; gap: 24px; font-size: 14px; line-height: 1.8; }
+    a { color: #9b9b9b; text-decoration: underline; text-underline-offset: 4px; }
+    a:hover { color: #eee; }
+    a:focus-visible { outline: 2px solid #eee; outline-offset: 5px; }
+    ::selection { color: #111; background: #eee; }
+    @media (max-width: 640px) { main { margin: 42px auto 56px; } .tagline { margin-bottom: 32px; } li { margin-bottom: 22px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>minim</h1>
+    <p class="tagline" lang="en">UI with agents.</p>
+    <ul aria-label="minimのプロンプト">
+      <li>常に依頼の目的を意識し、今の作業がそこから逸れていないか確かめる。</li>
+      <li>既存プロジェクトでは、今ある実装や仕組みを確認し、使えるものは使う。</li>
+      <li>Gitの履歴で分かる変更経緯は、コードのコメントに書かない。</li>
+      <li>平易な言葉で説明する。</li>
+      <li>返答の冒頭に、絵文字と内容をひと言で表す言葉を、この順で1行に置く。本文との間に空行を入れる。</li>
+      <li>作業途中の報告を除き、返答の最後に次の行動を必ず選択肢で示す。選択肢は必要な数だけ、最大5つまでにする。専用の選択UIがあれば使う。テキストではA（あ）、I（い）、U（う）、E（え）、O（お）で示す。</li>
+    </ul>
+    <footer><a href="https://github.com/hayashiii-ghub/minim">GitHub</a><a href="https://github.com/hayashiii-ghub/minim#codexへの導入">使い方</a></footer>
+  </main>
+</body>
+</html>
