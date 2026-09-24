@@ -1,6 +1,6 @@
 {
   "name": "minim",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "少ない入力と読みやすい返答で、AIとの会話を進める対話UI。",
   "author": {
     "name": "hayashiii-ghub"
@@ -11,7 +11,7 @@
   "interface": {
     "displayName": "minim",
     "shortDescription": "少ない入力と読みやすい返答で進める対話UI",
-    "longDescription": "目的を見失わず、使えるものを使い、平易な言葉でやりとりするための7つの約束を渡します。",
+    "longDescription": "目的を見失わず、使えるものを使い、平易な言葉でやりとりするための6つの約束を渡します。",
     "developerName": "hayashiii-ghub",
     "category": "Productivity",
     "capabilities": [],
