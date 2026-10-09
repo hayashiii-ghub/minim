@@ -1,6 +1,6 @@
 # minim site
 
-公開先: https://minim.haygsiiii.chatgpt.site/
+公開先: https://minim.hayashiii-gpt.chatgpt.site/
 
 `index.html`がサイトのソースです。プロンプト本文を変更する場合は、リポジトリの`minim.md`と一致させます。
 
