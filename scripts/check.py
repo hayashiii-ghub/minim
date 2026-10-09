@@ -3,6 +3,7 @@
 
 import json
 import os
+from html.parser import HTMLParser
 from pathlib import Path
 import re
 import shutil
@@ -10,6 +11,38 @@ import subprocess
 import tempfile
 
 REPO = Path(__file__).resolve().parent.parent
+
+
+class SitePrompt(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.in_prompt = False
+        self.in_item = False
+        self.items = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag == 'ul' and dict(attrs).get('aria-label') == 'minimのプロンプト':
+            self.in_prompt = True
+        elif tag == 'li' and self.in_prompt:
+            self.in_item = True
+            self.items.append('')
+
+    def handle_endtag(self, tag):
+        if tag == 'li':
+            self.in_item = False
+        elif tag == 'ul':
+            self.in_prompt = False
+
+    def handle_data(self, data):
+        if self.in_item:
+            self.items[-1] += data
+
+
+site_prompt = SitePrompt()
+site_prompt.feed((REPO / 'site/index.html').read_text())
+promises = (REPO / 'minim.md').read_text().splitlines()
+assert promises and all(line.startswith('- ') for line in promises)
+assert [item.strip() for item in site_prompt.items] == [line[2:] for line in promises], 'LPの本文がminim.mdと一致しません'
 subprocess.run(['python3', '-m', 'unittest', 'discover', '-s', str(REPO / 'tests')], check=True)
 ROOT = REPO / "dist/codex/minim"
 subprocess.run(['python3', str(REPO / 'scripts/generate.py'), '--check'], check=True)
@@ -75,4 +108,4 @@ with tempfile.TemporaryDirectory() as temporary:
         assert result.stdout == ""
         assert "本文を読めません" in result.stderr
 
-print("✔ minim: 生成物の一致・Cursor常時適用ルール・Codex本文読込・欠落時の診断を確認しました")
+print("✔ minim: LPと生成物の本文一致・Cursor常時適用ルール・Codex本文読込・欠落時の診断を確認しました")
