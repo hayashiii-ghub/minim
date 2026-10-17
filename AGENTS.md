@@ -29,10 +29,12 @@ codex plugin add minim@minim
 
 Codexへの接続は`adapters/codex/hooks/`、生成処理は`scripts/generate.ts`で編集します。`dist/`と`.agents/plugins/marketplace.json`は生成物なので直接編集しません。
 
-開発にはBunを使います。`bun install --frozen-lockfile`の後、変更時は`bun run generate`、`bun run check`、`bun run build`を実行します。検査は配布物・サイト本文の一致、フックの本文伝達、Cursorの既存登録の保護に絞ります。
+開発にはBun 1.4.2とTypeScriptを使います。`bun install --frozen-lockfile`の後、変更時は`bun run generate`、`bun run check`、`bun run test`、`bun run build`を実行します。検査は配布物・サイト本文の一致、フックの本文伝達、Cursorの既存登録の保護、静的サイトの公開URLと配信に絞ります。
 
 ## サイト
 
-`site/index.html`の本文を`minim.md`と揃えます。`bun run build`で`site/out/`を生成し、`bun run dev`でローカル表示を確認できます。
+`site/index.html`の本文を`minim.md`と揃えます。BunとTypeScriptによる静的サイトで、ブラウザ用JavaScriptはありません。`bun run build`で`site/dist/`を生成し、`bun run dev`でローカル表示を確認できます。公開URLの正本は`plugin.json`の`homepage`で、canonical・OG・サイトマップへ反映します。
 
-公開は`site/.openai/hosting.json`にある既存Siteを使います。専用コピーのソースを`site/`と揃え、そこで`bun build.ts`を実行してSitesの手順で公開します。公開範囲を維持します。GitHubへのpushだけではサイトは更新されません。専用の作業コピーはGit管理外の`.sites-runtime/site/`です。
+公開先はVercelの`minim`プロジェクト、URLは`https://minim.shigoto.dev/`です。GitHub連携のRoot Directoryはリポジトリのルート、Framework PresetはOther。ルートの`vercel.json`が依存導入・ビルド・出力先を指定します。PRのPreviewで確認し、`main`でProductionへ反映します。Squarespace DomainsのDNS設定にVercel指定のサブドメイン用レコードを追加します。
+
+`site/.openai/hosting.json`は旧Sitesの識別情報として保持します。旧URLの転送が必要なときだけ参照し、通常の公開には使いません。
