@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 export const outputDirectory = join(import.meta.dir, "dist");
@@ -14,6 +14,7 @@ export function buildSite(output = outputDirectory): void {
   const template = readFileSync(join(import.meta.dir, "index.html"), "utf8");
   const html = template.replaceAll("{{SITE_URL}}", siteUrl.href);
   mkdirSync(output, { recursive: true });
+  copyFileSync(join(import.meta.dir, "public/og-minim.png"), join(output, "og-minim.png"));
   writeFileSync(join(output, "index.html"), html);
   writeFileSync(join(output, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${siteUrl}sitemap.xml\n`);
   writeFileSync(join(output, "sitemap.xml"),
@@ -24,6 +25,7 @@ export function siteResponse(request: Request, output = outputDirectory): Respon
   const { pathname } = new URL(request.url);
   const path = pathname === "/" || pathname === "/index.html" ? "index.html"
     : pathname === "/robots.txt" ? "robots.txt"
+    : pathname === "/og-minim.png" ? "og-minim.png"
     : pathname === "/sitemap.xml" ? "sitemap.xml" : null;
   return path ? new Response(Bun.file(join(output, path))) : new Response("Not Found", { status: 404 });
 }
