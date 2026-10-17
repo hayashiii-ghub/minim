@@ -35,6 +35,6 @@ Codexへの接続は`adapters/codex/hooks/`、生成処理は`scripts/generate.t
 
 `site/index.html`の本文を`minim.md`と揃えます。BunとTypeScriptによる静的サイトで、ブラウザ用JavaScriptはありません。`bun run build`で`site/dist/`を生成し、`bun run dev`でローカル表示を確認できます。公開URLの正本は`plugin.json`の`homepage`で、canonical・OG・サイトマップへ反映します。
 
-公開先はVercelの`minim`プロジェクト、URLは`https://minim.shigoto.dev/`です。GitHub連携のRoot Directoryはリポジトリのルート、Framework PresetはOther。ルートの`vercel.json`が依存導入・ビルド・出力先を指定します。PRのPreviewで確認し、`main`でProductionへ反映します。Google Cloud DNSにはVercelが指定するサブドメイン用レコードを設定します。
+公開先はVercelの`minim`プロジェクト、URLは`https://minim.shigoto.dev/`です。GitHub連携のRoot Directoryはリポジトリのルート、Framework PresetはOther。ルートの`vercel.json`が依存導入・ビルド・出力先を指定します。PRのPreviewで確認し、`main`でProductionへ反映します。Squarespace DomainsのDNS設定にVercel指定のサブドメイン用レコードを追加します。
 
 `site/.openai/hosting.json`は旧Sitesの識別情報として保持します。旧URLの転送が必要なときだけ参照し、通常の公開には使いません。
