@@ -8,7 +8,9 @@ test("公開物は本文とリンクを保ち、正本の公開URLを使う静�
   const output = mkdtempSync(join(tmpdir(), "minim-site-"));
   try {
     buildSite(output);
-    expect(readdirSync(output).sort()).toEqual(["index.html", "og-minim.png", "robots.txt", "sitemap.xml"]);
+    expect(readdirSync(output).sort()).toEqual([
+      "favicon.ico", "favicon.png", "favicon.svg", "index.html", "og-minim.png", "robots.txt", "sitemap.xml",
+    ]);
     const html = readFileSync(join(output, "index.html"), "utf8");
     const template = readFileSync(join(import.meta.dir, "../site/index.html"), "utf8");
     const { homepage } = JSON.parse(readFileSync(join(import.meta.dir, "../plugin.json"), "utf8")) as {
@@ -46,6 +48,23 @@ test("公開物は本文とリンクを保ち、正本の公開URLを使う静�
     expect(imageResponse.status).toBe(200);
     expect(imageResponse.headers.get("content-type")).toBe("image/png");
     expect(Buffer.from(await imageResponse.arrayBuffer())).toEqual(sourceImage);
+    for (const [file, type] of [
+      ["favicon.svg", "image/svg+xml"],
+      ["favicon.png", "image/png"],
+      ["favicon.ico", "image/x-icon"],
+    ] as const) {
+      const sourceIcon = readFileSync(join(import.meta.dir, "../site/public", file));
+      expect(html).toContain(`href="/${file}"`);
+      expect(readFileSync(join(output, file))).toEqual(sourceIcon);
+      const response = siteResponse(new Request(`http://localhost/${file}`), output);
+      expect(response.status).toBe(200);
+      expect(response.headers.get("content-type")).toBe(type);
+      expect(Buffer.from(await response.arrayBuffer())).toEqual(sourceIcon);
+    }
+    const svg = readFileSync(join(output, "favicon.svg"), "utf8");
+    expect(svg).toContain("<path");
+    expect(svg).not.toMatch(/<text\b|font-family/u);
+    expect(html).not.toContain("data:image/svg+xml");
     expect(siteResponse(new Request("http://localhost/missing"), output).status).toBe(404);
     expect(siteResponse(new Request("http://localhost/plugin.json"), output).status).toBe(404);
     expect(siteResponse(new Request("http://localhost/og-minim.svg"), output).status).toBe(404);
