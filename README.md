@@ -23,6 +23,8 @@ Cloudflareの本番構成は `minim.shigoto.dev` → `minim-site` です。mode�
 
 Node.js 24.22.1、Bun 1.4.2、cf 1.0.0-beta.28、Wrangler 4.158.0を使います。依存の版は `package.json` と `bun.lock` で固定します。
 
+Cloudflare Buildsの自動公開は `main` だけを対象にし、Node.js 24.22.1 / Bun 1.4.2、ルート `/` で実行します。buildは `bun run check && bun run test && bun run cf:build:production`、deployは `node node_modules/cf/bin/cf deploy --prebuilt --mode production --worker minim-site` です。接続だけで有効化済みとは扱わず、trigger設定と実行結果を確認します。下の手動公開手順も引き続き使えます。
+
 | 対象 | 設定 |
 | --- | --- |
 | image / container | `dev-environment:0.1.1` / `minim-cf-preview-dev` |
