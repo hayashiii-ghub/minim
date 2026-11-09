@@ -25,6 +25,6 @@ codex plugin add minim@minim
 - Bun 1.4.4を使う。`bun install --frozen-lockfile` の後、変更時は `bun run generate`、`bun run check`、`bun run test`、`bun run build`。
 - 配布物・サイト本文の一致、フックの本文伝達、Cursorの旧登録保護、公開URLと配信を確認する。
 - サイトは `site/index.html` の静的HTML。本文は `minim.md`、公開URLは `plugin.json` の `homepage` に揃える。`bun run dev` で確認し、終了後に停止する。
-- Vercelのリポジトリルート設定と `vercel.json`、既存プロジェクト・旧デプロイは復旧用に保持する。`site/.openai/hosting.json` は旧Sitesの転送確認用に保持する。
+- 旧Vercelプロジェクト・デプロイ・独自ドメイン登録は、保管・復元と公開確認後の2026-11-09に削除済み。`vercel.json` は参考として残すが、DNSだけを戻す復旧はできない。Vercelを再利用するときはプロジェクトと公開先を再作成・検証してからCustom DomainとDNSを切り替える。`site/.openai/hosting.json` は旧Sitesの記録として保持する。
 - CFはmode省略・`preview`で独自ドメインなしの `minim-site-preview`、明示した `production`で `minim-site` と `minim.shigoto.dev`。それ以外は拒否する。DNS・TLS・公開URLを確認するまで切替完了と扱わない。`wrangler.config.ts` の `assetsDirectory` は生成先 `site/dist` を保ち、ソースの `site/` を配信しない。
 - 開発・検査はREADMEの専用containerで行う。既存Bun 1.4.4の生成・検査・テストを維持し、CF CLIはNode 24.22.1で実行する。認証はMac側、build後はMacから `fnm exec --using=24.22.1 cf deploy --prebuilt --worker minim-site-preview`、本番は `--mode production --worker minim-site` を明示する。本番の公開は独自ドメインも適用するため、DNS有効化と既存レコード・証明書の状態を先に確認する。mode間で同じBuild Outputを上書きするため、公開前に対象modeを再buildする。`cf deploy` が既存のBun buildを実行するとは扱わない。

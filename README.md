@@ -19,7 +19,9 @@ https://github.com/hayashiii-ghub/minim
 
 ## サイトの開発と公開
 
-Cloudflareの本番構成は `minim.shigoto.dev` → `minim-site` です。mode省略・`preview`は独自ドメインを持たない `minim-site-preview`、明示した `production`だけが本番Workerと独自ドメインを対象にします。既存の `bun run build` が作る `site/dist/` を配信します。切替完了はDNS・TLS・公開URLの確認で判断し、復旧用のVercelプロジェクトと旧デプロイは保持します。
+Cloudflareの本番構成は `minim.shigoto.dev` → `minim-site` です。mode省略・`preview`は独自ドメインを持たない `minim-site-preview`、明示した `production`だけが本番Workerと独自ドメインを対象にします。既存の `bun run build` が作る `site/dist/` を配信します。
+
+2026-11-09に保管・復元とCloudflareの公開を確認し、旧Vercelプロジェクト・デプロイ・独自ドメイン登録を削除しました。Vercelを再利用する場合は、プロジェクトと公開先を再作成して動作を確認してから、CloudflareのCustom DomainとDNSを切り替えます。保存したDNSレコードを戻すだけでは復旧できません。
 
 Node.js 24.22.1、Bun 1.4.4、cf 1.0.0-beta.28、Wrangler 4.158.0を使います。依存の版は `package.json` と `bun.lock` で固定します。
 
