@@ -9,5 +9,5 @@
     "allowImportingTsExtensions": true,
     "skipLibCheck": true
   },
-  "include": ["scripts/**/*.ts", "tests/**/*.ts", "site/*.ts"]
+  "include": ["scripts/**/*.ts", "tests/**/*.ts", "site/*.ts", "cloudflare.config.ts", "wrangler.config.ts"]
 }

@@ -10,11 +10,18 @@
     "test": "bun test",
     "build": "bun site/build.ts",
     "dev": "bun site/build.ts --serve",
-    "install:cursor": "bun scripts/install-cursor.ts"
+    "install:cursor": "bun scripts/install-cursor.ts",
+    "cf:build": "bun run build && node node_modules/cf/bin/cf build",
+    "cf:dev": "bun run build && node node_modules/cf/bin/cf dev",
+    "cf:check": "bun run cf:build && node node_modules/cf/bin/cf deploy --prebuilt --worker minim-site-preview --dry-run",
+    "cf:build:production": "bun run build && node node_modules/cf/bin/cf build --mode production",
+    "cf:check:production": "bun run cf:build:production && node node_modules/cf/bin/cf deploy --prebuilt --mode production --worker minim-site --dry-run"
   },
   "devDependencies": {
     "@types/bun": "1.4.4",
-    "typescript": "7.0.2"
+    "cf": "1.0.0-beta.28",
+    "typescript": "7.0.2",
+    "wrangler": "4.158.0"
   },
   "engines": {
     "bun": "1.4.2"
