@@ -22,9 +22,9 @@ codex plugin add minim@minim
 - 本文の正本は `minim.md`。平易な約束だけを短く保ち、専門スキルや作業手順を足さない。
 - 配布情報はAgent Plugins形式の `plugin.json` が正本。`extensions.com.openai.codex` は生成時に取り出し、クライアントの直接対応を前提にしない。
 - 接続は `adapters/codex/hooks/`、生成は `scripts/generate.ts` で編集する。`dist/` と `.agents/plugins/marketplace.json` は直接編集しない。
-- Bun 1.4.2を使う。`bun install --frozen-lockfile` の後、変更時は `bun run generate`、`bun run check`、`bun run test`、`bun run build`。
+- Bun 1.4.4を使う。`bun install --frozen-lockfile` の後、変更時は `bun run generate`、`bun run check`、`bun run test`、`bun run build`。
 - 配布物・サイト本文の一致、フックの本文伝達、Cursorの旧登録保護、公開URLと配信を確認する。
 - サイトは `site/index.html` の静的HTML。本文は `minim.md`、公開URLは `plugin.json` の `homepage` に揃える。`bun run dev` で確認し、終了後に停止する。
 - Vercelのリポジトリルート設定と `vercel.json`、既存プロジェクト・旧デプロイは復旧用に保持する。`site/.openai/hosting.json` は旧Sitesの転送確認用に保持する。
 - CFはmode省略・`preview`で独自ドメインなしの `minim-site-preview`、明示した `production`で `minim-site` と `minim.shigoto.dev`。それ以外は拒否する。DNS・TLS・公開URLを確認するまで切替完了と扱わない。`wrangler.config.ts` の `assetsDirectory` は生成先 `site/dist` を保ち、ソースの `site/` を配信しない。
-- 開発・検査はREADMEの専用containerで行う。既存Bun 1.4.2の生成・検査・テストを維持し、CF CLIはNode 24.22.1で実行する。認証はMac側、build後はMacから `fnm exec --using=24.22.1 cf deploy --prebuilt --worker minim-site-preview`、本番は `--mode production --worker minim-site` を明示する。本番の公開は独自ドメインも適用するため、DNS有効化と既存レコード・証明書の状態を先に確認する。mode間で同じBuild Outputを上書きするため、公開前に対象modeを再buildする。`cf deploy` が既存のBun buildを実行するとは扱わない。
+- 開発・検査はREADMEの専用containerで行う。既存Bun 1.4.4の生成・検査・テストを維持し、CF CLIはNode 24.22.1で実行する。認証はMac側、build後はMacから `fnm exec --using=24.22.1 cf deploy --prebuilt --worker minim-site-preview`、本番は `--mode production --worker minim-site` を明示する。本番の公開は独自ドメインも適用するため、DNS有効化と既存レコード・証明書の状態を先に確認する。mode間で同じBuild Outputを上書きするため、公開前に対象modeを再buildする。`cf deploy` が既存のBun buildを実行するとは扱わない。
