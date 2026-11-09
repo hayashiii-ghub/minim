@@ -17,9 +17,9 @@ https://github.com/hayashiii-ghub/minim
 更新・解除もエージェントに頼めます。手順は[AGENTS.md](AGENTS.md)。
 返答はモデルや他の指示にも左右されます。
 
-## サイトの開発とCloudflare移行準備
+## サイトの開発と公開
 
-本番 `minim.shigoto.dev` は引き続きVercelです。CFはmode省略・`preview`で `minim-site-preview`、明示した `production`で本番候補 `minim-site` を対象にします。両方とも `workers.dev` だけで確認する設定で、独自ドメイン・routes・DNSは設定していません。既存の `bun run build` が作る `site/dist/` を配信します。
+Cloudflareの本番構成は `minim.shigoto.dev` → `minim-site` です。mode省略・`preview`は独自ドメインを持たない `minim-site-preview`、明示した `production`だけが本番Workerと独自ドメインを対象にします。既存の `bun run build` が作る `site/dist/` を配信します。切替完了はDNS・TLS・公開URLの確認で判断し、復旧用のVercelプロジェクトと旧デプロイは保持します。
 
 Node.js 24.22.1、Bun 1.4.2、cf 1.0.0-beta.28、Wrangler 4.158.0を使います。依存の版は `package.json` と `bun.lock` で固定します。
 
@@ -49,6 +49,6 @@ container exec -w /workspace minim-cf-preview-dev bunx --package bun@1.4.2 bun r
 | 対象 | container内のbuild | Macでの公開 |
 | --- | --- | --- |
 | プレビュー | `bun run cf:build` | `fnm exec --using=24.22.1 cf deploy --prebuilt --worker minim-site-preview` |
-| 本番候補 | `bun run cf:build:production` | `fnm exec --using=24.22.1 cf deploy --prebuilt --mode production --worker minim-site` |
+| 本番 | `bun run cf:build:production` | `fnm exec --using=24.22.1 cf deploy --prebuilt --mode production --worker minim-site` |
 
-両modeは同じ `.cloudflare/output/` を上書きするため、公開直前に対象のmodeで再buildし、`config.json` の `buildContext.mode` と `worker.config.json` のWorker名を確認します。cf 1.0.0-beta.28は明示したmodeの不一致を拒否しますが、省略時はBuild Outputのmodeをそのまま使うため、公開時は上の `--worker` も明示します。本番候補の公開だけでは `minim.shigoto.dev` は切り替わりません。
+両modeは同じ `.cloudflare/output/` を上書きするため、公開直前に対象のmodeで再buildし、`config.json` の `buildContext.mode` と `worker.config.json` のWorker名・独自ドメインを確認します。cf 1.0.0-beta.28は明示したmodeの不一致を拒否しますが、省略時はBuild Outputのmodeをそのまま使うため、公開時は上の `--worker` も明示します。本番の公開は独自ドメインの設定も適用するため、Cloudflare DNSの有効化と既存レコード・証明書の状態を確認してから実行します。

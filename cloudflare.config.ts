@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => {
     accountId: "7e0d344d3920f4fa34ccd3b3c4e2a0c7",
     worker: {
       name: mode === "production" ? "minim-site" : "minim-site-preview",
+      ...(mode === "production" ? { domains: ["minim.shigoto.dev"] } : {}),
       compatibilityDate: "2026-11-09",
       observability: { enabled: true },
       workersDev: true,
